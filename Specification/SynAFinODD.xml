@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../Schemas/tei_odds.rnc" type="application/relax-ng-compact-syntax"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>ISOTiger ODD Specification</title>
+                <editor>
+                    <persName>
+                        <forename>Laurent</forename>
+                        <surname>Romary</surname>
+                    </persName>
+                </editor>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>The SynAF gang</publisher>
+                <date>2014-12-01</date>
+                <availability>
+                    <licence>CC-BY</licence>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <biblStruct type="standard">
+                    <monogr>
+                        <title level="u" type="main">TIGERSearch 2.1</title>
+                        <title level="u" type="sub">User's Manual</title>
+                        <imprint>
+                            <publisher>ISO</publisher>
+                            <date>...</date>
+                        </imprint>
+                    </monogr>
+                    <note>The schema defined here is intended to be compliant with the
+                        standard</note>
+                </biblStruct>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>Corpus body</head>
+                <egXML xmlns="http://www.tei-c.org/ns/Examples">
+                    <body>
+
+                        <s id="s5">
+                            <graph root="s5_504">
+                                <terminals>
+                                    <t id="s5_1" word="Die" pos="ART" morph="Def.Fem.Nom.Sg"/>
+                                    <t id="s5_2" word="Tagung" pos="NN" morph="Fem.Nom.Sg.*"/>
+                                    <t id="s5_3" word="hat" pos="VVFIN" morph="3.Sg.Pres.Ind"/>
+                                    <t id="s5_4" word="mehr" pos="PIAT" morph="--"/>
+                                    <t id="s5_5" word="Teilnehmer" pos="NN" morph="Masc.Akk.Pl.*"/>
+                                    <t id="s5_6" word="als" pos="KOKOM" morph="--"/>
+                                    <t id="s5_7" word="je" pos="ADV" morph="--"/>
+                                    <t id="s5_8" word="zuvor" pos="ADV" morph="--"/>
+                                </terminals>
+                                <nonterminals>
+                                    <nt id="s5_500" cat="NP">
+                                        <edge label="NK" idref="s5_1"/>
+                                        <edge label="NK" idref="s5_2"/>
+                                    </nt>
+                                    <nt id="s5_501" cat="AVP">
+                                        <edge label="CM" idref="s5_6"/>
+                                        <edge label="MO" idref="s5_7"/>
+                                        <edge label="HD" idref="s5_8"/>
+                                    </nt>
+                                    <nt id="s5_502" cat="AP">
+                                        <edge label="HD" idref="s5_4"/>
+                                        <edge label="CC" idref="s5_501"/>
+                                    </nt>
+                                    <nt id="s5_503" cat="NP">
+                                        <edge label="NK" idref="s5_502"/>
+                                        <edge label="NK" idref="s5_5"/>
+                                    </nt>
+                                    <nt id="s5_504" cat="S">
+                                        <edge label="SB" idref="s5_500"/>
+                                        <edge label="HD" idref="s5_3"/>
+                                        <edge label="OA" idref="s5_503"/>
+                                    </nt>
+                                </nonterminals>
+                            </graph>
+                        </s>
+
+                    </body>
+                </egXML>
+            </div>
+            <div>
+                <head>Specification</head>
+                <schemaSpec ident="SynAF" start="corpus" ns="http://www.iso.org/ns/SynAF">
+                    <moduleRef key="linking"/>
+
+                    <!-- Metamodel components -->
+                    <elementSpec ident="corpus">
+                        <gloss>Syntactic Annotation Collection</gloss>
+                        <desc>Contains all declarations and annotations for a SynAF-Tiger conformant
+                            document</desc>
+                        <content>
+                            <optional xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="head" xmlns="http://relaxng.org/ns/structure/1.0"/>
+                            </optional>
+                            <ref name="body" xmlns="http://relaxng.org/ns/structure/1.0"/>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="subcorpus"/>
+                            </zeroOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="tiger_version">
+                                <gloss>Tiger version</gloss>
+                                <desc>Version of the Tiger format used in the document</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                        <remarks>
+                            <p>The <att>ID</att> attribute is deprecated since it should be
+                                superceded by a unique identifier for language resourses (cf. ISO
+                                24619).</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <!-- Header part -->
+                    <elementSpec ident="head" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Global Information</gloss>
+                        <desc>Represents technical and administrative information applying to the
+                            entire multilingual data collection.</desc>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="meta"/>
+                            </zeroOrMore>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="annotation"/>
+                            </zeroOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="external">
+                                <datatype>
+                                    <rng:data xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                                        type="anyURI"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                        <remarks>
+                            <p>Example: title of the data collection, revision history,
+                                context,…</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <!-- Specification of the meta component (meta-data) -->
+
+                    <elementSpec ident="meta" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Metadata Component</gloss>
+                        <desc>Groups all information associated to the general description and
+                            management of the annotation document</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <choice>
+                                    <ref name="name"/>
+                                    <ref name="author"/>
+                                    <ref name="date"/>
+                                    <ref name="description"/>
+                                    <ref name="format"/>
+                                    <ref name="history"/>
+                                </choice>
+                            </zeroOrMore>
+                        </content>
+                    </elementSpec>
+
+
+                    <elementSpec ident="name" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>...</gloss>
+                        <desc>...</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                        <remarks>
+                            <p>SHould be rename to <gi>title</gi></p>
+                        </remarks>
+                    </elementSpec>
+
+
+                    <elementSpec ident="format" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>...</gloss>
+                        <desc>...</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                        <remarks>
+                            <p>SHould be rename to <gi>title</gi></p>
+                        </remarks>
+                    </elementSpec>
+
+                    <elementSpec ident="author" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Author</gloss>
+                        <equiv name="author" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <desc>the person responsible for the creation of the content.</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="date" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Date</gloss>
+                        <equiv name="date" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <desc>a date.</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                        <remarks>
+                            <p>The date is encoded according to a profile of [ISO8601] as described
+                                in [W3CDTF] and follows the YYYYMMDDThhmmssZ format.</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <elementSpec ident="description" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>...</gloss>
+                        <desc>...</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="history" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>...</gloss>
+                        <desc>...</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                    </elementSpec>
+
+                    <!-- Specification of the annotation component -->
+
+                    <elementSpec ident="annotation" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>History Component</gloss>
+                        <desc>This generic component allows to trace modifications on the component
+                            it is anchored to (i.e. versioning).</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <choice>
+                                    <ref name="feature"/>
+                                    <ref name="edgelabel"/>
+                                    <ref name="secedgelabel"/>
+                                </choice>
+                            </zeroOrMore>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="edgelabel" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Edge label</gloss>
+                        <desc>...</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.typed"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="value"/>
+                            </zeroOrMore>
+                        </content>
+                        <remarks>
+                            <p>...</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <elementSpec ident="secedgelabel" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>History Component</gloss>
+                        <desc>This generic component allows to trace modifications on the component
+                            it is anchored to (i.e. versioning).</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="value"/>
+                            </zeroOrMore>
+                        </content>
+                        <remarks>
+                            <p><gi>secedge</gi> is deprecated in Tiger-II in favour of <tag>edge
+                                    type="sec"</tag></p>
+                        </remarks>
+                    </elementSpec>
+
+
+                    <elementSpec ident="body" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Body</gloss>
+                        <desc>Contains all annotations annotations</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="s"/>
+                            </zeroOrMore>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="subcorpus" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Subcorpus</gloss>
+                        <desc>Contains all annotations annotations</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                        </classes>
+                        <content>
+                            <group xmlns="http://relaxng.org/ns/structure/1.0">
+                                <optional>
+                                    <ref name="head"/>
+                                </optional>
+                                <ref name="body"/>
+                                <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                    <ref name="subcorpus"/>
+                                </zeroOrMore>
+                            </group>
+                        </content>
+                        <remarks>
+                            <p>We should check how much subcorpus has been used and the actual "best
+                                practices" concerning mixtures of <gi>s</gi> and
+                                <gi>subcorpus</gi></p>
+                        </remarks>
+                    </elementSpec>
+
+                    <elementSpec ident="s" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Segment</gloss>
+                        <desc>Groups together all annotations for one sentence.</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="graph"/>
+                            </zeroOrMore>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="graph" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Monolingual Component</gloss>
+                        <desc>Part of a multilingual component (MultiC) containing information
+                            related to one language</desc>
+                        <classes>
+                            <memberOf key="att.lang"/>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.xlink"/>
+                            <memberOf key="att.temporal"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <choice>
+                                    <ref name="terminals"/>
+                                    <ref name="nonterminals"/>
+                                </choice>
+                            </zeroOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="word">
+                                <gloss>Word</gloss>
+                                <desc>Indicates the surface form of the token</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="root" usage="opt">
+                                <gloss>Root</gloss>
+                                <desc>...</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="discontinuous" usage="opt">
+                                <gloss>Discontinuous</gloss>
+                                <desc>Indicates that the syntactic graph is not fully
+                                    connected.</desc>
+                                <valList>
+                                    <valItem ident="true"/>
+                                    <valItem ident="false"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                        <remarks>
+                            <p>This attribute is there for backward compatibility with existing
+                                Tiger corpora and must be deprecated.</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <elementSpec ident="terminals" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Segmentation Component</gloss>
+                        <desc>A recursive component allowing any level of segmentation for textual
+                            information.</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.xlink"/>
+                            <memberOf key="att.temporal"/>
+                            <memberOf key="att.linguistic"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="t"/>
+                            </zeroOrMore>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="nonterminals" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>Non terminals</gloss>
+                        <desc>Groups together all <gi>node</gi> and <gi>edge</gi> corresponding to a
+                            single syntactic analysis</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.xlink"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <choice>
+                                    <ref name="edge"/>
+                                    <ref name="nt"/>
+                                </choice>
+                            </zeroOrMore>
+                        </content>
+                        <remarks>
+                            <p>A <gi>nonterminals</gi> usually correspond to one sentence.</p>
+                            <p>The <att>xml:id</att> attribute can be used to provide a unique
+                                reference to the analysis.</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <!-- t element - terminal node -->
+                    <elementSpec ident="t" ns="http://www.iso.org/ns/SynAF">
+                        <gloss>terminal node</gloss>
+                        <desc>represents an ISOTiger terminal node</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.typed"/>
+                            <memberOf key="att.linguistic"/>
+                            <memberOf key="att.global.linking"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <choice>
+                                    <ref name="secedge"/>
+                                    <ref name="edge"/>
+                                </choice>
+                            </zeroOrMore>
+                        </content>
+                        <remarks>
+                            <p>terminal nodes can point to equivalent MAF wordforms by means of the
+                                    <att>corresp</att> attribute</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <elementSpec ident="edge" ns="http://www.iso.org/ns/SynAF">
+                        <equiv name="source" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <desc>A complete citation of the bibliographic information pertaining to a
+                            document or other resource. [ISO 12620:1999]</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.typed"/>
+                            <memberOf key="att.pointing"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                        <attList>
+                            <attDef ident="label">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="func">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+                    <elementSpec ident="secedge" ns="http://www.iso.org/ns/SynAF">
+                        <equiv name="source" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <desc>A complete citation of the bibliographic information pertaining to a
+                            document or other resource. [ISO 12620:1999]</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.pointing"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                        <attList>
+                            <attDef ident="label">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+                    <elementSpec ident="nt" ns="http://www.iso.org/ns/SynAF">
+                        <equiv name="sourceType" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <desc>...</desc>
+                        <classes>
+                            <memberOf key="att.id"/>
+                            <memberOf key="att.xlink"/>
+                            <memberOf key="att.typed"/>
+                            <memberOf key="att.linguistic"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <choice>
+                                    <ref name="edge"/>
+                                    <ref name="secedge"/>
+                                </choice>
+                            </zeroOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="cat">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+
+
+                    <elementSpec ident="version" ns="http://www.iso.org/ns/MLIF">
+                        <equiv name="version" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <desc>a unique and non-ambiguous number used for versioning purposes.</desc>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                    </elementSpec>
+
+                    <!-- W3C attributes -->
+                    <classSpec ident="att.lang" type="atts">
+                        <desc>Provides a general definition of xml:lang for the description of
+                            working language in the MLIF meta model and corresponding data
+                            categories when applicable</desc>
+                        <attList>
+                            <attDef ident="lang" ns="http://www.w3.org/XML/1998/namespace">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </classSpec>
+
+                    <classSpec ident="att.id" type="atts">
+                        <desc>Provides a general definition of xml:id for the unique identification
+                            components in the MLIF meta model</desc>
+                        <attList>
+                            <attDef ident="id" ns="http://www.w3.org/XML/1998/namespace">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <!--           To be able to parse Tiger1 data        -->
+                            <!--<attDef ident="id">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>-->
+                        </attList>
+                        <remarks>
+                            <p>The two attributes <att>xml:id</att> et <att>id</att> are defined at
+                                present, in order to ensure backword compatibility with Tiger data.
+                                    <att>xml:id</att> is the only one recommended by this
+                                standard</p>
+                        </remarks>
+                    </classSpec>
+
+                    <classSpec ident="att.pointing" type="atts">
+                        <desc>Provides a general definition of idref and tagret for the unique
+                            reference to other objects</desc>
+                        <attList>
+                            <attDef ident="target" usage="opt">
+                                <equiv/>
+                                <desc>specifies the destination of the reference by supplying one or
+                                    more URI References</desc>
+                                <datatype maxOccurs="unbounded">
+                                    <rng:data xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                                        type="anyURI"/>
+                                </datatype>
+                                <valDesc>One or more syntactically valid URI references, separated
+                                    by whitespace. Because whitespace is used to separate URIs, no
+                                    whitespace is permitted inside a single URI. If a whitespace
+                                    character is required in a URI, it should be escaped with the
+                                    normal mechanism, e.g. <code>TEI%20Consortium</code>.</valDesc>
+                            </attDef>
+
+                            <attDef ident="idref" usage="opt">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                                <remarks>
+                                    <p>To be deprecated in favour of pointer based mechanisms</p>
+                                </remarks>
+                            </attDef>
+                        </attList>
+                        <remarks>
+                            <p>The two attributes <att>xml:id</att> et <att>id</att> are defined at
+                                present, in order to ensure backword compatibility with Tiger data.
+                                    <att>xml:id</att> is the only one recommended by this
+                                standard</p>
+                        </remarks>
+                    </classSpec>
+
+                    <classSpec ident="att.named" type="atts">
+                        <desc>Provides a name to the generic element having this attribute</desc>
+                        <attList>
+                            <attDef ident="name">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </classSpec>
+
+                    <classSpec ident="att.typed" type="atts">
+                        <desc>Provides a tpe attribute</desc>
+                        <attList>
+                            <attDef ident="type">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </classSpec>
+
+
+
+                    <!-- XLINK attributes -->
+                    <classSpec ident="att.xlink" type="atts">
+                        <desc>Provides the definition of all XLink attributes needed for MLIF</desc>
+                        <attList>
+                            <attDef ident="label" ns="http://www.w3.org/1999/xlink">
+                                <desc>Label of a resource of locator element</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                                <remarks>
+                                    <p>XLink traversal attribute</p>
+                                </remarks>
+                            </attDef>
+
+                            <attDef ident="href" ns="http://www.w3.org/1999/xlink">
+                                <desc>Supply the data to find a remote resource</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                                <remarks>
+                                    <p>Specify a document (URI) and an XPointer</p>
+                                </remarks>
+                            </attDef>
+
+                            <attDef ident="type" ns="http://www.w3.org/1999/xlink">
+                                <valList>
+                                    <valItem ident="simple">
+                                        <desc>Creates a simple link</desc>
+                                    </valItem>
+                                    <valItem ident="extended">
+                                        <desc>Creates an extended link</desc>
+                                    </valItem>
+                                    <valItem ident="locator">
+                                        <desc>Creates a locator link that points to a
+                                            resource</desc>
+                                    </valItem>
+                                    <valItem ident="arc">
+                                        <desc>Creates an arc with multiple resources and various
+                                            traversal paths</desc>
+                                    </valItem>
+                                    <valItem ident="resource">
+                                        <desc>Creates a resource link, which indicates a specific
+                                            resource</desc>
+                                    </valItem>
+                                    <valItem ident="title">
+                                        <desc>Creates a title link. Such elements are useful for
+                                            internationalization purposes</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+
+                            <attDef ident="title" ns="http://www.w3.org/1999/xlink">
+                                <desc>Human-readable description</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+
+                            <attDef ident="from" ns="http://www.w3.org/1999/xlink">
+                                <desc>What resource an arc comes from</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                                <remarks>
+                                    <p>XLink traversal attribute</p>
+                                </remarks>
+                            </attDef>
+
+                            <attDef ident="to" ns="http://www.w3.org/1999/xlink">
+                                <desc>What resource an arc goes to</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                                <remarks>
+                                    <p>XLink traversal attribute</p>
+                                </remarks>
+                            </attDef>
+                        </attList>
+                    </classSpec>
+
+                    <!-- Temporal data categories -->
+
+                    <classSpec ident="model.temporal" type="model">
+                        <desc>Groups together all data categories provided synchronisation or
+                            temporal information to textual content.</desc>
+                        <!--                        <classes>
+                            <memberOf key="model.MultiCPart"/>
+                            <memberOf key="model.MonoCPart"/>
+                        </classes>-->
+                    </classSpec>
+
+                    <elementSpec ident="feature">
+                        <equiv name="genericPlaceholder" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <gloss>Generic placeholder</gloss>
+                        <desc>The <gi>genericPlaceholder</gi> data category is used to replace any
+                            inline code of the original document. [From TMX to be edited] The actual
+                            inline data is stored in <gi>tag</gi> elements in the header of the
+                            file. The required xid attribute is used to reference the <gi>tag</gi>
+                            element that contains the replaced code.</desc>
+                        <classes>
+                            <memberOf key="att.named"/>
+                            <memberOf key="att.typed"/>
+                        </classes>
+                        <content>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="value"/>
+                            </zeroOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="domain">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="datcat" ns="http://www.iso.org/ns/DCR">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+                    <elementSpec ident="value">
+                        <equiv name="placeholder" uri="http://www.isocat.org/dc/ISO-DC-1345"/>
+                        <gloss>Placeholder</gloss>
+                        <desc>The <gi>placeholder</gi> data category is used to delimit a sequence
+                            of native standalone codes in the segment, or the initial or ending
+                            portion of a paired tag that does not have its matching code within the
+                            segment, that contains embedded translatable text.</desc>
+                        <classes>
+                            <memberOf key="att.named"/>
+                        </classes>
+                        <content>
+                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                        </content>
+                        <attList>
+                            <attDef ident="datcat" ns="http://www.iso.org/ns/DCR">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                        <remarks>
+                            <p>Implemented as <gi>ph</gi> in TMX and XLIFF</p>
+                        </remarks>
+                    </elementSpec>
+
+                    <!-- Linguistic data categories -->
+                    <!-- expressed through an attribute classes -->
+
+                    <classSpec ident="att.linguistic" type="atts">
+                        <desc>Linguistic data categories</desc>
+                        <attList>
+                            <attDef ident="pos">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="lemma">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="stem">
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="word">
+                                <gloss>Word</gloss>
+                                <desc>Indicates the surface form of the token</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="token">
+                                <gloss>Token</gloss>
+                                <desc>Points to the surface form of the token</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="morph">
+                                <gloss>Morphological features</gloss>
+                                <desc>Provides additional morphological information for the surface
+                                    token</desc>
+                                <datatype>
+                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </classSpec>
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>

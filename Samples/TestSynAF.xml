@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../Schemas/SynAF.rnc" type="application/relax-ng-compact-syntax"?>
+<corpus xmlns="http://www.iso.org/ns/SynAF" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:dcr="http://www.iso.org/ns/DCR" tiger_version="...">
+    <head external="...">
+        <!-- Début SynAF-2 -->
+        <meta>
+            <name>name of the corpus</name>
+            <author>author of the corpus</author>
+            <date>creation date of the corpus</date>
+            <description>description of the corpus</description>
+            <format>original format, if the corpus was not born as an ISOTiger corpus</format>
+            <history>version of the corpus</history>
+        </meta>
+        <!-- Fin SynAF-2 -->
+        <!-- Début SynAF-2 -->
+        <annotation>
+            <!-- All attributes -->
+            <feature type="" dcr:datcat="" domain="" name=""/>
+            <feature name="pos" domain="t"/>
+            <feature name="lemma" domain="t"/>
+            <feature name="cat" domain="nt"/>
+            <feature name="label" domain="edge"/>
+        </annotation>
+        <!-- Fin SynAF-2 -->
+        <!-- Début SynAF-2 -->
+        <annotation>
+            <external corresp="MyAnnotations.xml"/>
+        </annotation>
+        <!-- Fin SynAF-2 -->
+        <!-- Début SynAF-2 -->
+        <annotation>
+            <feature name="pos" domain="t">
+                <value name="PP">Personal pronoun</value>
+            </feature>
+        </annotation>
+        <!-- Fin SynAF-2 -->
+        <!-- Début SynAF-2 -->
+        <annotation>
+            <feature
+                name="pos" domain="t" 
+                dcr:datcat="http://www.isocat.org/datcat/DC-396">
+                <value
+                    name="PP" 
+                    dcr:datcat="http://www.isocat.org/datcat/DC-1463"/>
+            </feature>
+        </annotation>
+        <!-- Fin SynAF-2 -->
+        
+    </head>
+    <body>
+        <!-- Exemple de travail -->
+        <s>
+            <graph>
+                <nonterminals>
+                    <!-- ALl <nt> attributes -->
+                    <nt xml:id="" word="" type="" token="" stem="" pos="" morph="" lemma="" cat=""
+                        xlink:from="" xlink:href="" xlink:label="" xlink:title="" xlink:to=""
+                        xlink:type="">
+                        <!-- all <edge> attributes -->
+                        <edge type="" xml:id="" target="" func="" idref="" label=""/>
+                        <secedge/>
+                        <!-- A supprimer? -->
+                    </nt>
+                    <!-- Début SynAF-2 -->
+                    <nt xml:id="s1_nt1" type="wordform">
+                        <edge xml:id="s1_e2" type="comp" target="#s1_t1"/>
+                        <edge xml:id="s1_e3" type="comp" target="#s1_t2"/>
+                    </nt>
+                    <!-- Fin SynAF-2 -->
+                    <!-- Début SynAF-2 - example 10-->
+                    <nt xml:id="s1_nt1" cat="NP">
+                        <edge xml:id="s1_e1" label="HD" target="#s1_t1"/>
+                    </nt>
+                    <!-- ... -->
+
+                    <!-- Fin SynAF-2 -->
+                    <edge target="#dd"/>
+                    <!-- Dans SynAF, on ne peut pas avoir de <edge> en dehors de <t> ou de <nt> -->
+                </nonterminals>
+                <terminals>
+                    <!-- All <t> attributes -->
+                    <!-- Manque @corresp -->
+                    <t lemma="" morph="" pos="" stem="" token="" type="" word="" xml:id=""/>
+                    <t>
+                        <edge/>
+                    </t>
+                    <!-- Début SynAF-2 -->
+                    <t xml:id="s1_t1" word="two"/>
+                    <t xml:id="s1_t2" word="words"/>
+                    <!-- Fin SynAF-2 -->
+                    <!-- Début SynAF-2 -->
+                    <t xml:id="s9_1" corresp="example.maf#wf_1"/>
+                    <t xml:id="s9_2" corresp="example.maf#wf_2"/>
+                    <!-- Fin SynAF-2 -->
+                    <!-- Début SynAF-2 -->
+                    <t xml:id="s1_t1" word="house-" type="morpheme"/>
+                    <t xml:id="s1_t2" word="builder" type="morpheme">
+                        <edge xml:id="s1_e1" type="dep" target="#s1_t1" label="obj"/>
+                    </t>
+                    <!-- Fin SynAF-2 -->
+                    <!-- Début SynAF-2 - example 10-->
+                    <t xml:id="s1_t1" word="I" lemma="I" pos="PP"/>
+                    <!-- Fin SynAF-2 -->
+
+                </terminals>
+            </graph>
+        </s>
+        <!-- example issu de SynAF-2 -->
+        <s>
+            <graph xml:id="s1_g1">
+                <terminals>
+                    <t xml:id="s1_t1"/>
+                    <t xml:id="s1_t2"/>
+                </terminals>
+                <nonterminals>
+                    <nt xml:id="s1_nt1">
+                        <edge xml:id="s1_e1" target="#s1_t1"/>
+                        <edge xml:id="s1_e2" target="#s1_t2"/>
+                    </nt>
+                </nonterminals>
+            </graph>
+        </s>
+
+    </body>
+    <!-- Début SynAF-2 -->
+    <subcorpus xml:id="c2">
+        <head/>
+        <body/>
+        <subcorpus xml:id="c3">
+            <head/>
+            <body/>
+        </subcorpus>
+    </subcorpus>
+    <!-- Fin SynAF-2 -->
+    
+</corpus>

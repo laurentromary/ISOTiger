@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../Schemas/tei_odds.rnc" type="application/relax-ng-compact-syntax"?>
-<TEI xmlns="http://www.tei-c.org/ns/1.0">
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0">
     <teiHeader>
         <fileDesc>
             <titleStmt>
@@ -87,7 +87,9 @@
             <div>
                 <head>Specification</head>
                 <schemaSpec ident="SynAF" start="corpus" ns="http://www.iso.org/ns/SynAF">
+                    <moduleRef key="tei"/>
                     <moduleRef key="linking"/>
+                    <moduleRef key="iso-fs"/>
 
                     <!-- Metamodel components -->
                     <elementSpec ident="corpus">
@@ -95,20 +97,20 @@
                         <desc>Contains all declarations and annotations for a SynAF-Tiger conformant
                             document</desc>
                         <content>
-                            <optional xmlns="http://relaxng.org/ns/structure/1.0">
-                                <ref name="head" xmlns="http://relaxng.org/ns/structure/1.0"/>
-                            </optional>
-                            <ref name="body" xmlns="http://relaxng.org/ns/structure/1.0"/>
-                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
-                                <ref name="subcorpus"/>
-                            </zeroOrMore>
+                            <rng:optional>
+                                <rng:ref name="head"/>
+                            </rng:optional>
+                            <rng:ref name="body"/>
+                            <rng:zeroOrMore>
+                                <rng:ref name="subcorpus"/>
+                            </rng:zeroOrMore>
                         </content>
                         <attList>
                             <attDef ident="tiger_version">
                                 <gloss>Tiger version</gloss>
                                 <desc>Version of the Tiger format used in the document</desc>
                                 <datatype>
-                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                                    <rng:text/>
                                 </datatype>
                             </attDef>
                         </attList>
@@ -125,18 +127,17 @@
                         <desc>Represents technical and administrative information applying to the
                             entire multilingual data collection.</desc>
                         <content>
-                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
-                                <ref name="meta"/>
-                            </zeroOrMore>
-                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
-                                <ref name="annotation"/>
-                            </zeroOrMore>
+                            <rng:zeroOrMore>
+                                <rng:ref name="meta"/>
+                            </rng:zeroOrMore>
+                            <rng:zeroOrMore>
+                                <rng:ref name="annotation"/>
+                            </rng:zeroOrMore>
                         </content>
                         <attList>
                             <attDef ident="external">
                                 <datatype>
-                                    <rng:data xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                                        type="anyURI"/>
+                                    <rng:data type="anyURI"/>
                                 </datatype>
                             </attDef>
                         </attList>
@@ -267,13 +268,14 @@
                             <memberOf key="att.named"/>
                         </classes>
                         <content>
-                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
-                                <choice>
-                                    <ref name="feature"/>
-                                    <ref name="edgelabel"/>
-                                    <ref name="secedgelabel"/>
-                                </choice>
-                            </zeroOrMore>
+                            <rng:zeroOrMore>
+                                <rng:choice>
+                                    <rng:ref name="feature"/>
+                                    <rng:ref name="edgelabel"/>
+                                    <rng:ref name="secedgelabel"/>
+                                    <rng:ref name="fLib"/>
+                                </rng:choice>
+                            </rng:zeroOrMore>
                         </content>
                     </elementSpec>
 
@@ -467,6 +469,7 @@
                                 <choice>
                                     <ref name="secedge"/>
                                     <ref name="edge"/>
+                                    <ref name="fs"/>
                                 </choice>
                             </zeroOrMore>
                         </content>
@@ -486,7 +489,9 @@
                             <memberOf key="att.pointing"/>
                         </classes>
                         <content>
-                            <text xmlns="http://relaxng.org/ns/structure/1.0"/>
+                            <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0">
+                                <ref name="fs"/>
+                            </zeroOrMore>
                         </content>
                         <attList>
                             <attDef ident="label">
@@ -536,6 +541,7 @@
                                 <choice>
                                     <ref name="edge"/>
                                     <ref name="secedge"/>
+                                    <ref name="fs"/>
                                 </choice>
                             </zeroOrMore>
                         </content>
@@ -595,7 +601,7 @@
                                 standard</p>
                         </remarks>
                     </classSpec>
-
+<!--
                     <classSpec ident="att.pointing" type="atts">
                         <desc>Provides a general definition of idref and tagret for the unique
                             reference to other objects</desc>
@@ -630,7 +636,7 @@
                                     <att>xml:id</att> is the only one recommended by this
                                 standard</p>
                         </remarks>
-                    </classSpec>
+                    </classSpec>-->
 
                     <classSpec ident="att.named" type="atts">
                         <desc>Provides a name to the generic element having this attribute</desc>
@@ -642,19 +648,6 @@
                             </attDef>
                         </attList>
                     </classSpec>
-
-                    <classSpec ident="att.typed" type="atts">
-                        <desc>Provides a tpe attribute</desc>
-                        <attList>
-                            <attDef ident="type">
-                                <datatype>
-                                    <text xmlns="http://relaxng.org/ns/structure/1.0"/>
-                                </datatype>
-                            </attDef>
-                        </attList>
-                    </classSpec>
-
-
 
                     <!-- XLINK attributes -->
                     <classSpec ident="att.xlink" type="atts">

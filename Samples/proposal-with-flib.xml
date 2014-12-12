@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schemas/SynAF.rnc" type="application/relax-ng-compact-syntax"?>
+<corpus xmlns="http://www.iso.org/ns/SynAF" xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:dcr="http://www.isocat.org/ns/dcr" tiger_version="..."
+	xmlns:tei="http://www.tei-c.org/ns/1.0">
+	<head>
+		<meta>
+			<name>name of the corpus</name>
+			<author>author of the corpus</author>
+			<date>creation date of the corpus</date>
+			<description>description of the corpus</description>
+			<format>original format, if the corpus was not born as an ISOTiger corpus</format>
+			<history>version of the corpus</history>
+		</meta>
+		<annotation>
+			<fLib n="constituency features">
+				<f xml:id="catNP" name="cat">
+					<symbol value="NP" dcr:datcat="http://www.isocat.org/datcat/DC-2256"/>
+				</f>
+				<f xml:id="catS" name="cat">
+					<symbol value="S" dcr:datcat="http://www.isocat.org/datcat/DC-2295"/>
+				</f>
+				<f xml:id="catVP" name="cat">
+					<symbol value="VP" dcr:datcat="http://www.isocat.org/datcat/DC-2255"/>
+				</f>
+				<f xml:id="labelHD" name="label">
+					<symbol value="HD" dcr:datcat="http://www.isocat.org/datcat/DC-2306"/>
+				</f>
+				<f xml:id="labelSBJ" name="label">
+					<symbol value="SBJ"  dcr:datcat="http://www.isocat.org/datcat/DC-2261"/>
+				</f>
+				<f xml:id="label--" name="label">
+					<symbol value="--"/>
+				</f>
+			</fLib>
+			<fLib n="dependency features">
+				<f xml:id="labelaux" name="label">
+					<symbol value="aux" dcr:datcat="http://www.isocat.org/datcat/DC-2262"/>
+				</f>
+				<f xml:id="labelnsubj" name="label">
+					<symbol value="nsubj"/>
+				</f>
+			</fLib>
+		</annotation>
+	</head>
+	<body>
+		<s xml:id="s1">
+			<graph xml:id="s1_g1">
+				<terminals>
+					<t xml:id="s1_t1" corresp="m1.maf#wf1"/>
+					<!-- we -->
+					<t xml:id="s1_t2" corresp="m1.maf#wf2"/>
+					<!-- can -->
+					<t xml:id="s1_t3" corresp="m1.maf#wf3">
+						<!-- see -->
+						<edge type="dep" target="#s1_t1">
+							<fs feats="#labelnsubj"/>
+						</edge>
+						<edge type="dep" target="#s1_t2">
+							<fs feats="#labelaux"/>
+						</edge>
+					</t>
+				</terminals>
+				<nonterminals>
+					<nt xml:id="s1_nt1">
+						<fs feats="#catNP"/>
+						<edge type="prim" target="#s1_t1">
+							<fs feats="#labelHD"/>
+						</edge>
+					</nt>
+					<nt xml:id="s1_nt2">
+						<fs feats="#catVP"/>
+						<edge type="prim" target="#s1_t3">
+							<fs feats="#labelHD"/>
+						</edge>
+					</nt>
+					<nt xml:id="s1_nt3">
+						<fs feats="#catVP"/>
+						<edge type="prim" target="#s1_nt2">
+							<fs feats="#label--"/>
+						</edge>
+						<edge type="prim" target="#s1_t2">
+							<fs feats="#labelHD"/>
+						</edge>
+					</nt>
+					<nt xml:id="s1_nt4">
+						<fs feats="#catS"/>
+						<edge type="prim" target="#s1_nt1">
+							<fs feats="#labelSBJ"/>
+						</edge>
+						<edge type="prim" target="#s1_nt3">
+							<fs feats="#label--"/>
+						</edge>
+					</nt>
+				</nonterminals>
+			</graph>
+		</s>
+	</body>
+</corpus>

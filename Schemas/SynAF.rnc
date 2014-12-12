@@ -1,11 +1,12 @@
 default namespace = "http://www.iso.org/ns/SynAF"
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
-namespace ns1 = "http://www.iso.org/ns/DCR"
+namespace ns1 = "http://www.isocat.org/ns/dcr"
+namespace ns2 = "http://www.iso.org/ns/DCR"
 namespace rng = "http://relaxng.org/ns/structure/1.0"
 namespace sch = "http://purl.oclc.org/dsdl/schematron"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2014-12-02T09:42:00Z. 
+# Schema generated from ODD source 2014-12-12T07:53:55Z. 
 # Edition: Version 2.7.0. Last updated on
 #	16th September 2014, revision 13036
 # Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -14,6 +15,287 @@ namespace xlink = "http://www.w3.org/1999/xlink"
 # CC-BY
 
 sch:ns [ prefix = "tei" uri = "http://www.tei-c.org/ns/1.0" ]
+macro.paraContent =
+  (text | model.gLike | model.phrase | model.inter | model.global)*
+macro.limitedContent = (text | model.limitedPhrase | model.inter)*
+macro.xtext = (text | model.gLike)*
+data.certainty = "high" | "medium" | "low" | "unknown"
+data.probability = xsd:double { minInclusive = "0" maxInclusive = "1" }
+data.numeric =
+  xsd:double
+  | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+  | xsd:decimal
+data.interval =
+  xsd:float { minExclusive = "0" }
+  | "regular"
+  | "irregular"
+  | "unknown"
+data.temporal.w3c =
+  xsd:date
+  | xsd:gYear
+  | xsd:gMonth
+  | xsd:gDay
+  | xsd:gYearMonth
+  | xsd:gMonthDay
+  | xsd:time
+  | xsd:dateTime
+data.truthValue = xsd:boolean
+data.language = xsd:language | ""
+data.pointer = xsd:anyURI
+data.word = xsd:token { pattern = "(\p{L}|\p{N}|\p{P}|\p{S})+" }
+data.text = xsd:string
+data.name = xsd:Name
+data.enumerated = data.name
+att.datcat.attributes =
+  att.datcat.attribute.datcat, att.datcat.attribute.valueDatcat
+att.datcat.attribute.datcat =
+  
+  ## contains a PID (persistent identifier) that aligns the given element with the appropriate Data Category (or categories) in ISOcat.
+  attribute ns1:datcat {
+    list { data.pointer+ }
+  }?
+att.datcat.attribute.valueDatcat =
+  
+  ## contains a PID (persistent identifier) that aligns the content of the given element or the value of the given attribute with the appropriate simple Data Category (or categories) in ISOcat.
+  attribute ns1:valueDatcat {
+    list { data.pointer+ }
+  }?
+att.declaring.attributes = att.declaring.attribute.decls
+att.declaring.attribute.decls =
+  
+  ## identifies one or more declarable elements within the header, which are understood to apply to the element bearing this attribute and its content.
+  attribute decls {
+    list { data.pointer+ }
+  }?
+att.fragmentable.attributes = att.fragmentable.attribute.part
+att.fragmentable.attribute.part =
+  
+  ## specifies whether or not its parent element is fragmented in some way, typically by some other overlapping structure: for example a speech which is divided between two or more verse stanzas, a paragraph which is split across a page division, a verse line which is divided between two speakers.
+  [ a:defaultValue = "N" ]
+  attribute part {
+    
+    ## (yes) the element is fragmented in some (unspecified) respect
+    "Y"
+    | 
+      ## (no) either the element is not fragmented, or no claim is made as to its completeness.
+      "N"
+    | 
+      ## (initial) this is the initial part of a fragmented element
+      "I"
+    | 
+      ## (medial) this is a medial part of a fragmented element
+      "M"
+    | 
+      ## (final) this is the final part of a fragmented element
+      "F"
+  }?
+att.responsibility.attributes =
+  att.source.attributes,
+  att.responsibility.attribute.cert,
+  att.responsibility.attribute.resp
+att.responsibility.attribute.cert =
+  
+  ## (certainty) signifies the degree of certainty associated with the intervention or interpretation.
+  attribute cert { data.certainty }?
+att.responsibility.attribute.resp =
+  
+  ## (responsible party) indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.
+  attribute resp {
+    list { data.pointer+ }
+  }?
+att.global.attributes =
+  att.global.linking.attributes,
+  att.global.attribute.xmlid,
+  att.global.attribute.n,
+  att.global.attribute.xmllang,
+  att.global.attribute.rend,
+  att.global.attribute.style,
+  att.global.attribute.rendition,
+  att.global.attribute.xmlbase,
+  att.global.attribute.xmlspace
+att.global.attribute.xmlid =
+  
+  ## (identifier) provides a unique identifier for the element bearing the attribute.
+  attribute xml:id { xsd:ID }?
+att.global.attribute.n =
+  
+  ## (number) gives a number (or other label) for an element, which is not necessarily unique within the document.
+  attribute n { data.text }?
+att.global.attribute.xmllang =
+  
+  ## (language) indicates the language of the element content using a tag generated according to BCP 47.
+  attribute xml:lang { data.language }?
+att.global.attribute.rend =
+  
+  ## (rendition) indicates how the element in question was rendered or presented in the source text.
+  attribute rend {
+    list { data.word+ }
+  }?
+att.global.attribute.style =
+  
+  ## contains an expression in some formal style definition language which defines the rendering or presentation used for this element in the source text
+  attribute style { data.text }?
+att.global.attribute.rendition =
+  
+  ## points to a description of the rendering or presentation used for this element in the source text.
+  attribute rendition {
+    list { data.pointer+ }
+  }?
+att.global.attribute.xmlbase =
+  
+  ## provides a base URI reference with which applications can resolve relative URI references into absolute URI references.
+  attribute xml:base { data.pointer }?
+att.global.attribute.xmlspace =
+  
+  ## signals an intention about how white space should be managed by applications.
+  attribute xml:space {
+    
+    ## signals that the application's default white-space processing modes are acceptable
+    "default"
+    | 
+      ## indicates the intent that applications preserve all white space
+      "preserve"
+  }?
+att.typed.attributes =
+  att.typed.attribute.type, att.typed.attribute.subtype
+att.typed.attribute.type =
+  
+  ## characterizes the element in some sense, using any convenient classification scheme or typology.
+  attribute type { data.enumerated }?
+att.typed.attribute.subtype =
+  
+  ## provides a sub-categorization of the element, if needed
+  attribute subtype { data.enumerated }?
+sch:pattern [
+  id = "SynAF-att.typed-subtypeTyped-constraint-1"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "*[@subtype]"
+    "\x{a}" ~
+    "        "
+    sch:assert [
+      test = "@type"
+      "The "
+      sch:name [ ]
+      " element should not be categorized in detail with @subtype\x{a}" ~
+      " unless also categorized in general with @type"
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.pointing.attributes =
+  att.pointing.attribute.targetLang,
+  att.pointing.attribute.target,
+  att.pointing.attribute.evaluate
+att.pointing.attribute.targetLang =
+  
+  ## specifies the language of the content to be found at the destination referenced by target, using a language tag generated according to BCP 47.
+  attribute targetLang { data.language }?
+sch:pattern [
+  id = "SynAF-att.pointing-targetLang-targetLang-constraint-2"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[not(self::tei:schemaSpec)][@targetLang]"
+    "\x{a}" ~
+    "            "
+    sch:assert [
+      test = "count(@target)"
+      "@targetLang can only be used if @target is specified."
+    ]
+    "\x{a}" ~
+    "          "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.pointing.attribute.target =
+  
+  ## specifies the destination of the reference by supplying one or more URI References
+  attribute target {
+    list { data.pointer+ }
+  }?
+att.pointing.attribute.evaluate =
+  
+  ## specifies the intended meaning when the target of a pointer is itself a pointer.
+  attribute evaluate {
+    
+    ## if the element pointed to is itself a pointer, then the target of that pointer will be taken, and so on, until an element is found which is not a pointer.
+    "all"
+    | 
+      ## if the element pointed to is itself a pointer, then its target (whether a pointer or not) is taken as the target of this pointer.
+      "one"
+    | 
+      ## no further evaluation of targets is carried out beyond that needed to find the element specified in the pointer's target.
+      "none"
+  }?
+att.pointing.group.attributes =
+  att.pointing.attributes,
+  att.typed.attributes,
+  att.pointing.group.attribute.domains,
+  att.pointing.group.attribute.targFunc
+att.pointing.group.attribute.domains =
+  
+  ## optionally specifies the identifiers of the elements within which all elements indicated by the contents of this element lie.
+  attribute domains {
+    list { data.pointer, data.pointer, data.pointer* }
+  }?
+att.pointing.group.attribute.targFunc =
+  
+  ## (target function) describes the function of each of the values of the target attribute of the enclosed link, join, or alt tags.
+  attribute targFunc {
+    list { data.word, data.word, data.word* }
+  }?
+att.segLike.attributes =
+  att.datcat.attributes,
+  att.fragmentable.attributes,
+  att.segLike.attribute.function
+att.segLike.attribute.function =
+  
+  ## characterizes the function of the segment.
+  attribute function { data.enumerated }?
+model.segLike = seg
+model.global.meta =
+  link
+  | linkGrp
+  | timeline
+  | join
+  | joinGrp
+  | alt
+  | altGrp
+  | fs
+  | fLib
+  | fvLib
+model.milestoneLike = anchor
+model.gLike = notAllowed
+model.pLike = ab
+model.pLike_alternation = ab
+model.pLike_sequence = ab
+model.pLike_sequenceOptional = ab?
+model.pLike_sequenceOptionalRepeatable = ab*
+model.pLike_sequenceRepeatable = ab+
+model.featureVal.complex = fs | vColl | vNot | vMerge
+model.featureVal.single =
+  binary | symbol | numeric | \string | vLabel | \default | vAlt
+model.certLike = notAllowed
+model.descLike = notAllowed
+model.glossLike = notAllowed
+model.global = model.global.meta | model.milestoneLike
+model.featureVal = model.featureVal.complex | model.featureVal.single
+model.inter = notAllowed
+model.phrase = model.segLike
+model.limitedPhrase = notAllowed
+att.source.attributes = att.source.attribute.source
+att.source.attribute.source =
+  
+  ## provides a pointer to the bibliographical source from which a quotation or citation is drawn.
+  attribute source {
+    list { data.pointer+ }
+  }?
 att.global.linking.attributes =
   att.global.linking.attribute.corresp,
   att.global.linking.attribute.synch,
@@ -27,41 +309,41 @@ att.global.linking.attribute.corresp =
   
   ## (corresponds) points to elements that correspond to the current element in some way.
   attribute corresp {
-    list { empty }
+    list { data.pointer+ }
   }?
 att.global.linking.attribute.synch =
   
   ## (synchronous) points to elements that are synchronous with the current element.
   attribute synch {
-    list { empty }
+    list { data.pointer+ }
   }?
 att.global.linking.attribute.sameAs =
   
   ## points to an element that is the same as the current element.
-  attribute sameAs { text }?
+  attribute sameAs { data.pointer }?
 att.global.linking.attribute.copyOf =
   
   ## points to an element of which the current element is a copy.
-  attribute copyOf { text }?
+  attribute copyOf { data.pointer }?
 att.global.linking.attribute.next =
   
   ## points to the next element of a virtual aggregate of which the current element is part.
-  attribute next { text }?
+  attribute next { data.pointer }?
 att.global.linking.attribute.prev =
   
   ## (previous) points to the previous element of a virtual aggregate of which the current element is part.
-  attribute prev { text }?
+  attribute prev { data.pointer }?
 att.global.linking.attribute.exclude =
   
   ## points to elements that are in exclusive alternation with the current element.
   attribute exclude {
-    list { empty }
+    list { data.pointer+ }
   }?
 att.global.linking.attribute.select =
   
   ## selects one or more alternants; if one alternant is selected, the ambiguity or uncertainty is marked as resolved. If more than one alternant is selected, the degree of ambiguity or uncertainty is marked as reduced by the number of alternants not selected.
   attribute select {
-    list { empty }
+    list { data.pointer+ }
   }?
 link =
   
@@ -69,7 +351,7 @@ link =
   element link {
     empty
     >> sch:pattern [
-         id = "SynAF-link-linkTargets3-constraint-1"
+         id = "SynAF-link-linkTargets3-constraint-3"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -89,8 +371,43 @@ link =
          "\x{a}" ~
          "         "
        ],
+    att.global.attributes,
     att.pointing.attributes,
     att.typed.attributes,
+    empty
+  }
+linkGrp =
+  
+  ## (link group) defines a collection of associations or hypertextual links. [16.1. ]
+  element linkGrp {
+    (link)+, att.global.attributes, att.pointing.group.attributes, empty
+  }
+ab =
+  
+  ## (anonymous block) contains any arbitrary component-level unit of text, acting as an anonymous container for phrase or inter level elements analogous to, but without the semantic baggage of, a paragraph. [16.3. ]
+  element ab {
+    macro.paraContent,
+    att.global.attributes,
+    att.typed.attributes,
+    att.declaring.attributes,
+    att.fragmentable.attributes,
+    empty
+  }
+anchor =
+  
+  ## (anchor point) attaches an identifier to a point within a text, whether or not it corresponds with a textual element. [8.4.2.  16.4. ]
+  element anchor {
+    empty, att.global.attributes, att.typed.attributes, empty
+  }
+seg =
+  
+  ## (arbitrary segment) represents any segmentation of text below the chunk level. [16.3.  6.2.  7.2.5. ]
+  element seg {
+    macro.paraContent,
+    att.global.attributes,
+    att.segLike.attributes,
+    att.typed.attributes,
+    att.responsibility.attributes,
     empty
   }
 when =
@@ -98,9 +415,10 @@ when =
   ## indicates a point in time either relative to other elements in the same timeline tag, or absolutely. [16.5.2. ]
   element when {
     empty,
+    att.global.attributes,
     
     ## supplies an absolute value for the time.
-    attribute absolute { text }?,
+    attribute absolute { data.temporal.w3c }?,
     
     ## specifies the unit of time in which the interval value is expressed, if this is not inherited from the parent timeline.
     ## Suggested values include: 1] d(days) ; 2] h(hours) ; 3] min(minutes) ; 4] s(seconds) ; 5] ms(milliseconds) 
@@ -124,19 +442,54 @@ when =
     }?,
     
     ## specifies a time interval either as a number or as one of the keywords defined by the datatype data.interval
-    attribute interval { text }?,
+    attribute interval { data.interval }?,
     
     ## identifies the reference point for determining the time of the current when element, which is obtained by adding the interval to the time of the reference point.
-    attribute since { text }?,
+    attribute since { data.pointer }?,
+    empty
+  }
+timeline =
+  
+  ## provides a set of ordered points in time which can be linked to elements of a spoken text to create a temporal alignment of that text. [16.5.2. ]
+  element timeline {
+    when+,
+    att.global.attributes,
+    
+    ## designates the origin of the timeline, i.e. the time at which it begins.
+    attribute origin { data.pointer }?,
+    
+    ## specifies the unit of time corresponding to the interval value of the timeline or of its constituent points in time.
+    ## Suggested values include: 1] d(days) ; 2] h(hours) ; 3] min(minutes) ; 4] s(seconds) ; 5] ms(milliseconds) 
+    attribute unit {
+      
+      ## (days) 
+      "d"
+      | 
+        ## (hours) 
+        "h"
+      | 
+        ## (minutes) 
+        "min"
+      | 
+        ## (seconds) 
+        "s"
+      | 
+        ## (milliseconds) 
+        "ms"
+      | xsd:Name
+    }?,
+    
+    ## specifies a time interval either as a positive integral value or using one of a set of predefined codes.
+    attribute interval { data.interval }?,
     empty
   }
 join =
   
   ## identifies a possibly fragmented segment of text, by pointing at the possibly discontiguous elements which compose it. [16.7. ]
   element join {
-    (empty*)
+    ((model.descLike | model.certLike)*)
     >> sch:pattern [
-         id = "SynAF-join-joinTargets3-constraint-2"
+         id = "SynAF-join-joinTargets3-constraint-4"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -157,11 +510,12 @@ join =
          "\x{a}" ~
          "         "
        ],
+    att.global.attributes,
     att.pointing.attributes,
     att.typed.attributes,
     
     ## specifies the name of an element which this aggregation may be understood to represent.
-    attribute result { text }?,
+    attribute result { data.name }?,
     
     ## indicates whether the targets to be joined include the entire element indicated (the entire subtree including its root), or just the children of the target (the branches of the subtree).
     [ a:defaultValue = "root" ]
@@ -175,17 +529,31 @@ join =
     }?,
     empty
   }
+joinGrp =
+  
+  ## (join group) groups a collection of join elements and possibly pointers. [16.7. ]
+  element joinGrp {
+    (model.glossLike*, (join)+),
+    att.global.attributes,
+    att.pointing.group.attributes,
+    
+    ## supplies the default value for the result on each join included within the group.
+    attribute result { data.name }?,
+    empty
+  }
 alt =
   
   ## (alternation) identifies an alternation or a set of choices among elements or passages. [16.8. ]
   element alt {
     empty,
-    att.pointing.attribute.idref,
+    att.global.attributes,
+    att.pointing.attribute.targetLang,
+    att.pointing.attribute.evaluate,
     att.typed.attributes,
     
     ## specifies the destination of the reference by supplying one or more URI References
     attribute target {
-      list { empty }
+      list { data.pointer, data.pointer, data.pointer* }
     }?,
     
     ## states whether the alternations gathered in this collection are exclusive or inclusive.
@@ -200,10 +568,327 @@ alt =
     
     ## If mode is , each weight states the probability that the corresponding alternative occurs. If mode is incl each weight states the probability that the corresponding alternative occurs given that at least one of the other alternatives occurs.
     attribute weights {
-      list { empty }
+      list { data.probability, data.probability, data.probability* }
     }?,
     empty
   }
+altGrp =
+  
+  ## (alternation group) groups a collection of alt elements and possibly pointers. [16.8. ]
+  element altGrp {
+    (alt)*,
+    att.global.attributes,
+    att.pointing.group.attributes,
+    
+    ## states whether the alternations gathered in this collection are exclusive or inclusive.
+    [ a:defaultValue = "excl" ]
+    attribute mode {
+      
+      ## (exclusive) indicates that the alternation is exclusive, i.e. that at most one of the alternatives occurs.
+      "excl"
+      | 
+        ## (inclusive) indicates that the alternation is not exclusive, i.e. that one or more of the alternatives occur.
+        "incl"
+    }?,
+    empty
+  }
+fsdDecl =
+  
+  ## (feature system declaration) provides a feature system declaration comprising one or more feature structure declarations or feature structure declaration links. [18.11. ]
+  element fsdDecl { (fsDecl | fsdLink)+, att.global.attributes, empty }
+fsDecl =
+  
+  ## (feature structure declaration) declares one type of feature structure. [18.11. ]
+  element fsDecl {
+    (fsDescr?, fDecl+, fsConstraints?),
+    att.global.attributes,
+    
+    ## gives a name for the type of feature structure being declared.
+    attribute type { data.enumerated },
+    
+    ## gives the name of one or more typed feature structures from which this type inherits feature specifications and constraints; if this type includes a feature specification with the same name as that of any of those specified by this attribute, or if more than one specification of the same name is inherited, then the set of possible values is defined by unification. Similarly, the set of constraints applicable is derived by combining those specified explicitly within this element with those implied by the baseTypes attribute. When no baseTypes attribute is specified, no feature specification or constraint is inherited.
+    attribute baseTypes {
+      list { data.name+ }
+    }?,
+    empty
+  }
+fsDescr =
+  
+  ## (feature system description (in FSD)) describes in prose what is represented by the type of feature structure declared in the enclosing fsDecl. [18.11. ]
+  element fsDescr { macro.limitedContent, att.global.attributes, empty }
+fsdLink =
+  
+  ## (feature structure declaration link) associates the name of a typed feature structure with a feature structure declaration for it. [18.11. ]
+  element fsdLink {
+    empty,
+    att.global.attributes,
+    
+    ## identifies the type of feature structure to be documented; this will be the value of the type attribute on at least one feature structure.
+    attribute type { data.enumerated },
+    
+    ## supplies a pointer to a feature structure declaration (fsDecl) element within the current document or elsewhere.
+    attribute target { data.pointer },
+    empty
+  }
+fDecl =
+  
+  ## (feature declaration) declares a single feature, specifying its name, organization, range of allowed values, and optionally its default value. [18.11. ]
+  element fDecl {
+    (fDescr?, vRange, vDefault?),
+    att.global.attributes,
+    
+    ## a single word which follows the rules defining a legal XML name (see ), indicating the name of the feature being declared; matches the name attribute of f elements in the text.
+    attribute name { data.name },
+    
+    ## indicates whether or not the value of this feature may be present.
+    [ a:defaultValue = "true" ] attribute optional { data.truthValue }?,
+    empty
+  }
+fDescr =
+  
+  ## (feature description (in FSD)) describes in prose what is represented by the feature being declared and its values. [18.11. ]
+  element fDescr { macro.limitedContent, att.global.attributes, empty }
+vRange =
+  
+  ## (value range) defines the range of allowed values for a feature, in the form of an fs, vAlt, or primitive value; for the value of an f to be valid, it must be subsumed by the specified range; if the f contains multiple values (as sanctioned by the org attribute), then each value must be subsumed by the vRange. [18.11. ]
+  element vRange { model.featureVal, att.global.attributes, empty }
+vDefault =
+  
+  ## (value default) declares the default value to be supplied when a feature structure does not contain an instance of f for this name; if unconditional, it is specified as one (or, depending on the value of the org attribute of the enclosing fDecl) more fs elements or primitive values; if conditional, it is specified as one or more if elements; if no default is specified, or no condition matches, the value none is assumed. [18.11. ]
+  element vDefault {
+    (model.featureVal+ | if+), att.global.attributes, empty
+  }
+if =
+  
+  ## defines a conditional default value for a feature; the condition is specified as a feature structure, and is met if it subsumes the feature structure in the text for which a default value is sought. [18.11. ]
+  element if {
+    ((fs | f), then, model.featureVal),
+    att.global.attributes,
+    empty
+  }
+then =
+  
+  ## separates the condition from the default in an if, or the antecedent and the consequent in a cond element. [18.11. ]
+  element then { empty, att.global.attributes, empty }
+fsConstraints =
+  
+  ## (feature-structure constraints) specifies constraints on the content of valid feature structures. [18.11. ]
+  element fsConstraints {
+    (cond | bicond)*, att.global.attributes, empty
+  }
+cond =
+  
+  ## (conditional feature-structure constraint) defines a conditional feature-structure constraint; the consequent and the antecedent are specified as feature structures or feature-structure collections; the constraint is satisfied if both the antecedent and the consequent subsume a given feature structure, or if the antecedent does not. [18.11. ]
+  element cond {
+    ((fs | f), then, (fs | f)),
+    att.global.attributes,
+    empty
+  }
+bicond =
+  
+  ## (bi-conditional feature-structure constraint) defines a biconditional feature-structure constraint; both consequent and antecedent are specified as feature structures or groups of feature structures; the constraint is satisfied if both subsume a given feature structure, or if both do not. [18.11. ]
+  element bicond {
+    ((fs | f), iff, (fs | f)),
+    att.global.attributes,
+    empty
+  }
+iff =
+  
+  ## (if and only if) separates the condition from the consequence in a bicond element. [18.11. ]
+  element iff { empty, att.global.attributes, empty }
+fs =
+  
+  ## (feature structure) represents a feature structure, that is, a collection of feature-value pairs organized as a structural unit. [18.2. ]
+  element fs {
+    f*,
+    att.global.attributes,
+    att.datcat.attributes,
+    
+    ## specifies the type of the feature structure.
+    attribute type { data.enumerated }?,
+    
+    ## (features) references the feature-value specifications making up this feature structure.
+    attribute feats {
+      list { data.pointer+ }
+    }?,
+    empty
+  }
+f =
+  
+  ## (feature) represents a feature value specification, that is, the association of a name with a value of any of several different types. [18.2. ]
+  element f {
+    ((text | model.gLike | model.featureVal)*)
+    >> sch:pattern [
+         id = "SynAF-f-fValConstraints-constraint-3"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:fVal"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "not(tei:* and text)"
+             " A feature value cannot\x{a}" ~
+             "    contain both text and element content"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id = "SynAF-f-fValConstraints-constraint-4"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:fVal"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test = "count(tei:*)>1"
+             " A feature value can contain\x{a}" ~
+             "    only one child element"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.global.attributes,
+    att.datcat.attributes,
+    
+    ## a single word which follows the rules defining a legal XML name (see ), providing a name for the feature.
+    attribute name { data.name },
+    
+    ## (feature value) references any element which can be used to represent the value of a feature.
+    attribute fVal { data.pointer }?,
+    empty
+  }
+binary =
+  
+  ## (binary value) represents the value part of a feature-value specification which can contain either of exactly two possible values. [18.2. ]
+  element binary {
+    empty,
+    att.global.attributes,
+    att.datcat.attributes,
+    
+    ## supplies a binary value.
+    attribute value { data.truthValue },
+    empty
+  }
+symbol =
+  
+  ## (symbolic value) represents the value part of a feature-value specification which contains one of a finite list of symbols. [18.3. ]
+  element symbol {
+    empty,
+    att.global.attributes,
+    att.datcat.attributes,
+    
+    ## supplies a symbolic value for the feature, one of a finite list that may be specified in a feature declaration.
+    attribute value { data.word },
+    empty
+  }
+numeric =
+  
+  ## (numeric value) represents the value part of a feature-value specification which contains a numeric value or range. [18.3. ]
+  element numeric {
+    empty,
+    att.global.attributes,
+    att.datcat.attributes,
+    
+    ## supplies a lower bound for the numeric value represented, and also (if max is not supplied) its upper bound.
+    attribute value { data.numeric },
+    
+    ## supplies an upper bound for the numeric value represented.
+    attribute max { data.numeric }?,
+    
+    ## specifies whether the value represented should be truncated to give an integer value.
+    attribute trunc { data.truthValue }?,
+    empty
+  }
+\string =
+  
+  ## (string value) represents the value part of a feature-value specification which contains a string. [18.3. ]
+  element string {
+    macro.xtext, att.global.attributes, att.datcat.attributes, empty
+  }
+vLabel =
+  
+  ## (value label) represents the value part of a feature-value specification which appears at more than one point in a feature structure. [18.6. ]
+  element vLabel {
+    model.featureVal?,
+    att.global.attributes,
+    
+    ## supplies a name identifying the sharing point.
+    attribute name { data.word },
+    empty
+  }
+vColl =
+  
+  ## (collection of values) represents the value part of a feature-value specification which contains multiple values organized as a set, bag, or list. [18.7. ]
+  element vColl {
+    (fs | model.featureVal.single)*,
+    att.global.attributes,
+    
+    ## (organization) indicates organization of given value or values as set, bag or list.
+    attribute org {
+      
+      ## indicates that the given values are organized as a set.
+      "set"
+      | 
+        ## indicates that the given values are organized as a bag (multiset).
+        "bag"
+      | 
+        ## indicates that the given values are organized as a list.
+        "list"
+    }?,
+    empty
+  }
+\default =
+  
+  ## (default feature value) represents the value part of a feature-value specification which contains a defaulted value. [18.9. ]
+  element default { empty, att.global.attributes, empty }
+vAlt =
+  
+  ## (value alternation) represents the value part of a feature-value specification which contains a set of values, only one of which can be valid. [18.8.1. ]
+  element vAlt {
+    (model.featureVal, model.featureVal+), att.global.attributes, empty
+  }
+vNot =
+  
+  ## (value negation) represents a feature value which is the negation of its content. [18.8.2. ]
+  element vNot { model.featureVal, att.global.attributes, empty }
+vMerge =
+  
+  ## (merged collection of values) represents a feature value which is the result of merging together the feature values contained by its children, using the organization specified by the org attribute. [18.8.3. ]
+  element vMerge {
+    model.featureVal+,
+    att.global.attributes,
+    
+    ## indicates the organization of the resulting merged values as set, bag or list.
+    attribute org {
+      
+      ## indicates that the resulting values are organized as a set.
+      "set"
+      | 
+        ## indicates that the resulting values are organized as a bag (multiset).
+        "bag"
+      | 
+        ## indicates that the resulting values are organized as a list.
+        "list"
+    }?,
+    empty
+  }
+fLib =
+  
+  ## (feature library) assembles a library of feature elements. [18.4. ]
+  element fLib { f+, att.global.attributes, empty }
+fvLib =
+  
+  ## (feature-value library) assembles a library of reusable feature value elements (including complete feature structures). [18.4. ]
+  element fvLib { model.featureVal*, att.global.attributes, empty }
 corpus =
   
   ## (Syntactic Annotation Collection) Contains all declarations and annotations for a SynAF-Tiger conformant document
@@ -272,7 +957,7 @@ annotation =
   
   ## (History Component) This generic component allows to trace modifications on the component it is anchored to (i.e. versioning).
   element annotation {
-    (feature | edgelabel | secedgelabel)*,
+    (feature | edgelabel | secedgelabel | fLib)*,
     att.id.attributes,
     att.named.attributes,
     empty
@@ -340,7 +1025,7 @@ t =
   
   ## (terminal node) represents an ISOTiger terminal node
   element t {
-    (secedge | edge)*,
+    (secedge | edge | fs)*,
     att.id.attributes,
     att.typed.attributes,
     att.linguistic.attributes,
@@ -351,7 +1036,7 @@ edge =
   
   ## A complete citation of the bibliographic information pertaining to a document or other resource. [ISO 12620:1999]
   element edge {
-    text,
+    fs*,
     att.id.attributes,
     att.typed.attributes,
     att.pointing.attributes,
@@ -379,7 +1064,7 @@ nt =
   
   ## ...
   element nt {
-    (edge | secedge)*,
+    (edge | secedge | fs)*,
     att.id.attributes,
     att.xlink.attributes,
     att.typed.attributes,
@@ -399,28 +1084,11 @@ att.id.attribute.id =
   
   ##
   attribute xml:id { text }?
-att.pointing.attributes =
-  att.pointing.attribute.target, att.pointing.attribute.idref
-att.pointing.attribute.target =
-  
-  ## specifies the destination of the reference by supplying one or more URI References
-  attribute target {
-    list { xsd:anyURI+ }
-  }?
-att.pointing.attribute.idref =
-  
-  ##
-  attribute idref { text }?
 att.named.attributes = att.named.attribute.name
 att.named.attribute.name =
   
   ##
   attribute name { text }?
-att.typed.attributes = att.typed.attribute.type
-att.typed.attribute.type =
-  
-  ##
-  attribute type { text }?
 att.xlink.attributes =
   att.xlink.attribute.label,
   att.xlink.attribute.href,
@@ -464,7 +1132,7 @@ feature =
     attribute domain { text }?,
     
     ##
-    attribute ns1:datcat { text }?,
+    attribute ns2:datcat { text }?,
     empty
   }
 value =
@@ -475,7 +1143,7 @@ value =
     att.named.attributes,
     
     ##
-    attribute ns1:datcat { text }?,
+    attribute ns2:datcat { text }?,
     empty
   }
 att.linguistic.attributes =
